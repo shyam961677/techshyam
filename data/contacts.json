@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "Shyam Yadav",
+        "email": "shyammilan.wie@gmail.com",
+        "phone": "9953133123",
+        "subject": "Testing subject for contact us mail",
+        "message": "Testing",
+        "date": "2026-10-07 12:22:59",
+        "read": true
+    }
+]

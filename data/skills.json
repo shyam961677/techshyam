@@ -1,0 +1,10 @@
+[
+    {"id": 1,  "name": "Core PHP",       "order": 1},
+    {"id": 2,  "name": "Laravel",        "order": 2},
+    {"id": 3,  "name": "CodeIgniter",    "order": 3},
+    {"id": 4,  "name": "MySQL / PostgreSQL", "order": 4},
+    {"id": 5,  "name": "RESTful APIs",   "order": 5},
+    {"id": 6,  "name": "JavaScript / jQuery", "order": 6},
+    {"id": 7,  "name": "HTML / CSS / Bootstrap", "order": 7},
+    {"id": 8,  "name": "Docker / AWS",   "order": 8}
+]

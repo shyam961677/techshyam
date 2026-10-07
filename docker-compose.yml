@@ -1,0 +1,39 @@
+services:
+
+  web:
+    build: .
+    container_name: techshyam
+    ports:
+      - "8080:80"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-tls}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME:-TechShyam}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+    depends_on:
+      - redis
+    restart: unless-stopped
+    volumes:
+      # Persist JSON data files across image rebuilds
+      - techshyam_data:/var/www/html/data
+      # Persist uploaded images
+      - techshyam_uploads:/var/www/html/assets/images/uploads
+
+  redis:
+    image: redis:7-alpine
+    container_name: techshyam-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+  techshyam_data:
+  techshyam_uploads:

@@ -1,0 +1,66 @@
+{
+    "total": 8,
+    "today": 8,
+    "this_week": 8,
+    "this_month": 8,
+    "last_updated": "2026-10-07",
+    "logs": [
+        {
+            "ip": "::1",
+            "page": "/techshyam/about",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 12:32:01",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/about",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 12:31:06",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            "date": "2026-10-07 12:15:33",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            "date": "2026-10-07 12:12:50",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            "date": "2026-10-07 12:00:14",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/index1.php",
+            "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            "date": "2026-10-07 11:20:23",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            "date": "2026-10-07 11:04:48",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            "date": "2026-10-07 10:48:17",
+            "device": "Desktop"
+        }
+    ],
+    "last_month_reset": "2026-10"
+}

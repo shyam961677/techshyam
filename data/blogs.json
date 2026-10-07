@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "title": "Getting Started with PHP Development",
+        "slug": "getting-started-php-development",
+        "category": "PHP",
+        "image": "assets/images/blog/project1.png",
+        "excerpt": "A beginner's guide to setting up your PHP development environment and writing your first script.",
+        "content": "PHP is one of the most popular server-side scripting languages. In this post, we explore how to get started with PHP development...",
+        "tags": ["php", "beginner", "web development"],
+        "author": "Shyam Yadav",
+        "date": "2026-09-15",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 2,
+        "title": "Understanding RESTful API Design",
+        "slug": "understanding-restful-api-design",
+        "category": "API",
+        "image": "assets/images/blog/project2.png",
+        "excerpt": "Learn the principles of RESTful API design and how to build clean, well-structured APIs.",
+        "content": "REST (Representational State Transfer) is an architectural style for building web services. In this article, we explore the core principles...",
+        "tags": ["api", "rest", "backend"],
+        "author": "Shyam Yadav",
+        "date": "2026-10-01",
+        "published": true,
+        "views": 0
+    }
+]

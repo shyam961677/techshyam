@@ -1,4 +1,9 @@
-	   
+<?php
+
+    require_once __DIR__ . '/rate_limit.php';
+
+    rateLimit('mail', 5, 60);
+?>	   
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -213,7 +218,7 @@
                         <tbody id="mbody">
                           <tr>
                             <tr>
-                              <td colspan="2">Hi <?php echo $name; ?>,<br/>Thanks for visiting my Portfolio. I am very grateful for your time. Thank you for such a wonderful contribution. Thank you for taking the time.</td>
+                              <td colspan="2">Hi <?php echo $name ?? 'User'; ?>,<br/>Thanks for visiting my Portfolio. I am very grateful for your time. Thank you for such a wonderful contribution. Thank you for taking the time.</td>
                                
                             </tr>                            
                                <tr>
@@ -221,11 +226,11 @@
                                 </tr> 
                                  <tr>
                                   <th>Email</th>
-                                   <td><?php echo $email; ?></td>                                    
+                                   <td><?php echo $email ?? ''; ?></td>                                    
                                  </tr>
                                  <tr>
                                   <th>Phone Number</th>
-                                   <td><?php echo $phone; ?></td>                                    
+                                   <td><?php echo $phone ?? ''; ?></td>                                    
                                  </tr>
                                  <tr>
                                   <th>Subject</th>
@@ -233,7 +238,7 @@
                                  </tr>
                                  <tr>
                                   <th>Message</th>
-                                   <td><?php echo $message; ?></td>                                    
+                                   <td><?php echo $message ?? ''; ?></td>                                    
                                  </tr>
                                  
                                </tr>

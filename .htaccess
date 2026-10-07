@@ -1,0 +1,41 @@
+Options -Indexes
+RewriteEngine On
+
+# ─── Security: block direct access to data/ and sensitive files ───────────────
+RewriteRule ^data/                      - [F,L]
+RewriteRule ^admin/includes/            - [F,L]
+RewriteRule \.json$                     - [F,L]
+
+# ─── Canonical: redirect index.html → / ──────────────────────────────────────
+RewriteRule ^index\.html$  /  [R=301,L]
+RewriteRule ^index\.php$   /  [R=301,L]
+
+# ─── Admin routes (/admin, /admin/login, etc.) ───────────────────────────────
+RewriteRule ^admin/?$               admin/index.php   [END]
+RewriteRule ^admin/login/?$         admin/login.php   [END]
+RewriteRule ^admin/logout/?$        admin/logout.php  [END]
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^admin/([a-zA-Z0-9_-]+)/?$ admin/$1.php [QSA,END]
+RewriteRule ^admin/ - [R=404,L]
+
+# ─── API routes  /api/{endpoint} ─────────────────────────────────────────────
+RewriteRule ^api/?$                   api/index.php                      [L]
+RewriteRule ^api/([a-z_]+)/?$         api/index.php?endpoint=$1          [QSA,L]
+
+# ─── Portfolio section routes → serve index.php (SPA-style) ──────────────────
+# These clean URLs scroll to the right section via JS
+RewriteRule ^home/?$        index.php  [END]
+RewriteRule ^about/?$       index.php  [END]
+RewriteRule ^experience/?$  index.php  [END]
+RewriteRule ^services/?$    index.php  [END]
+RewriteRule ^portfolio/?$   index.php  [END]
+RewriteRule ^contact/?$     index.php  [END]
+
+# ─── Blog routes ─────────────────────────────────────────────────────────────
+RewriteRule ^blog/?$                  blog.php                           [L]
+RewriteRule ^blog/([a-z0-9_-]+)/?$   blog_post.php?slug=$1              [QSA,L]
+
+# ─── Fallback: real files/dirs pass through, else → index.php ────────────────
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$  index.php  [L]

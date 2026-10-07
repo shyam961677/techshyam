@@ -1,0 +1,90 @@
+[
+    {
+        "id": 1,
+        "title": "Time 2 Growmedia",
+        "tech": "CodeIgniter",
+        "url": "https://time2growmedia.com",
+        "description": "Event-management website with online booking and promotional features. Secure CMS for events, bookings, users, and content.",
+        "tags": ["CodeIgniter", "CMS", "Event Management"],
+        "image": "",
+        "order": 1,
+        "active": true
+    },
+    {
+        "id": 2,
+        "title": "ERP – Majestic Business Park",
+        "tech": "CodeIgniter",
+        "url": "https://erp.majesticbusinesspark.com",
+        "description": "ERP dashboard for tenants, office spaces, and rental operations with role-based authentication and invoice generation.",
+        "tags": ["CodeIgniter", "ERP", "RBAC"],
+        "image": "",
+        "order": 2,
+        "active": true
+    },
+    {
+        "id": 3,
+        "title": "ColorJet Group",
+        "tech": "Laravel",
+        "url": "https://colorjetgroup.com",
+        "description": "Laravel admin console for printer products, customer inquiries, sales operations, product listings, pricing, and inventory tracking.",
+        "tags": ["Laravel", "Admin Panel", "Inventory"],
+        "image": "assets/images/blog/project2.png",
+        "order": 3,
+        "active": true
+    },
+    {
+        "id": 4,
+        "title": "Martinus Education",
+        "tech": "CodeIgniter",
+        "url": "https://martinus.edu",
+        "description": "Educational website with course listings, admissions, student resources, and backend modules for content and user management.",
+        "tags": ["CodeIgniter", "Education", "CMS"],
+        "image": "",
+        "order": 4,
+        "active": true
+    },
+    {
+        "id": 5,
+        "title": "TUK Publications",
+        "tech": "CodeIgniter",
+        "url": "https://tukpublications.com",
+        "description": "Education management system with administrator, student, and teacher role-based dashboards and academic content workflows.",
+        "tags": ["CodeIgniter", "RBAC", "Education"],
+        "image": "",
+        "order": 5,
+        "active": true
+    },
+    {
+        "id": 6,
+        "title": "KLI School",
+        "tech": "CodeIgniter",
+        "url": "https://klischool.com",
+        "description": "School management system with dashboards for administrators, teachers, and students including records and operational workflows.",
+        "tags": ["CodeIgniter", "School Management"],
+        "image": "",
+        "order": 6,
+        "active": true
+    },
+    {
+        "id": 7,
+        "title": "UBank Connect",
+        "tech": "CodeIgniter",
+        "url": "https://ubankconnect.com",
+        "description": "Banking platform backend with secure authentication, user management, transactions, and core banking workflow modules.",
+        "tags": ["CodeIgniter", "Fintech", "Banking"],
+        "image": "assets/images/blog/project3.png",
+        "order": 7,
+        "active": true
+    },
+    {
+        "id": 8,
+        "title": "Enjerry",
+        "tech": "CodeIgniter",
+        "url": "https://enjerry.com",
+        "description": "Freelance job portal with role-based sign-ins for administrators and contractors, job management, and application workflows.",
+        "tags": ["CodeIgniter", "Job Portal", "RBAC"],
+        "image": "",
+        "order": 8,
+        "active": true
+    }
+]

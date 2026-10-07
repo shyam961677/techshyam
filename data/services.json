@@ -1,0 +1,8 @@
+[
+    {"id": 1, "icon": "bi-server",           "title": "Backend Development",   "description": "Robust server-side applications using Core PHP, Laravel, and CodeIgniter with clean MVC architecture.", "order": 1, "active": true},
+    {"id": 2, "icon": "bi-plug",             "title": "API Integration",        "description": "RESTful API design and third-party integrations including Razorpay, Stripe, SMS gateways, and Google APIs.", "order": 2, "active": true},
+    {"id": 3, "icon": "bi-shield-lock",      "title": "Auth & Security",        "description": "Role-based access control (RBAC), secure authentication, Google OAuth, and transaction validation.", "order": 3, "active": true},
+    {"id": 4, "icon": "bi-database",         "title": "Database Design",        "description": "Efficient schema design and optimized queries across MySQL, PostgreSQL, and MongoDB for high-performance apps.", "order": 4, "active": true},
+    {"id": 5, "icon": "bi-layout-text-window","title": "CMS & ERP Development", "description": "Custom CMS platforms and ERP dashboards tailored for education, healthcare, publishing, and fintech sectors.", "order": 5, "active": true},
+    {"id": 6, "icon": "bi-cloud-upload",     "title": "Cloud & DevOps",         "description": "Deployment pipelines using Docker containers and AWS services (EC2, S3, RDS) with Redis caching.", "order": 6, "active": true}
+]

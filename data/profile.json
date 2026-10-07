@@ -1,0 +1,67 @@
+{
+    "name": "Shyam Milan Yadav",
+    "title": "Senior Software Developer",
+    "subtitle": "PHP | Laravel | CodeIgniter",
+    "tagline": "Software Developer with 4+ years of experience building and maintaining web applications using Core PHP, Laravel, and CodeIgniter. Delivered ERP, CMS, education, healthcare, and fintech solutions — including role-based dashboards, REST API integrations, payment and SMS gateways, and secure authentication.",
+    "bio": "Experienced in backend feature development, database operations, troubleshooting, and collaborating with stakeholders to deliver maintainable application workflows. Passionate about writing clean, efficient code and solving complex problems across diverse industries.",
+    "email": "shyammilan002@gmail.com",
+    "phone1": "+91 9616776594",
+    "phone2": "",
+    "address": "Sector 59, Noida, Uttar Pradesh, India",
+    "photo": "assets/images/shyam1.jpg",
+    "photo2": "assets/images/shyam.jpg",
+    "resume": "assets/shyam_resume.pdf",
+    "education": {
+        "degree": "Bachelor of Computer Applications (BCA)",
+        "university": "Swami Vivekanand Subharti University, Meerut",
+        "year": "2016 – 2019"
+    },
+    "experience": [
+        {
+            "company": "TUK Publications",
+            "role": "Sr. Software Engineer",
+            "period": "Feb 2025 – Present",
+            "points": [
+                "Developed and maintained PHP, Laravel, and CodeIgniter applications supporting digital publishing and education workflows.",
+                "Built CMS modules and role-based dashboards for content, user, and administrative management.",
+                "Integrated REST APIs, payment gateways, and SMS services to connect web applications with external systems.",
+                "Implemented Google authentication and access controls; collaborated with stakeholders to deliver requirements-driven features."
+            ]
+        },
+        {
+            "company": "InfraHealth India Pvt. Ltd.",
+            "role": "Software Engineer",
+            "period": "Jul 2023 – Dec 2024",
+            "points": [
+                "Developed and supported healthcare web applications for hospital and clinical operations.",
+                "Built Hospital Management System (HMS) modules for patient management, billing, and appointment workflows.",
+                "Implemented PHP backend functionality, database operations, and REST API integrations for healthcare workflows.",
+                "Worked with cross-functional teams to troubleshoot issues and improve data accuracy, performance, and application reliability."
+            ]
+        },
+        {
+            "company": "Akonto Payment Solutions Pvt. Ltd.",
+            "role": "Jr. Software Engineer",
+            "period": "Nov 2021 – Jul 2023",
+            "points": [
+                "Contributed to the development and maintenance of PHP-based fintech and payment-processing applications.",
+                "Implemented backend features and integrated payment gateways and transaction APIs.",
+                "Supported secure transaction handling, validation, error handling, and performance optimization.",
+                "Collaborated on testing, debugging, deployments, and security-compliance activities."
+            ]
+        }
+    ],
+    "social": {
+        "linkedin": "https://www.linkedin.com/in/shyam-yadav-371420221/",
+        "github": "",
+        "twitter": "https://twitter.com/shyam_9616",
+        "instagram": "https://www.instagram.com/mr.shyam_97/",
+        "facebook": "https://www.facebook.com/shyammilan.yadav.50/"
+    },
+    "seo": {
+        "meta_title": "Shyam Milan Yadav | Senior Software Developer",
+        "meta_description": "Senior PHP Developer with 4+ years building ERP, CMS, healthcare, fintech web applications using Laravel, CodeIgniter.",
+        "meta_keywords": "php developer, laravel, codeigniter, senior software developer, shyam yadav, noida",
+        "og_image": "assets/images/shyam1.jpg"
+    }
+}
