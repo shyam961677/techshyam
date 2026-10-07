@@ -1,10 +1,108 @@
 {
-    "total": 8,
-    "today": 8,
-    "this_week": 8,
-    "this_month": 8,
+    "total": 22,
+    "today": 22,
+    "this_week": 22,
+    "this_month": 22,
     "last_updated": "2026-10-07",
     "logs": [
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 14:03:07",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 14:01:58",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog/getting-started-php-development",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:59:53",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog/clean-rest-api-design-laravel-resource-routes",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:58:47",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog/getting-started-php-development",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:58:47",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog/getting-started-php-development",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:58:04",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog/clean-rest-api-design-laravel-resource-routes",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:48:31",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:48:30",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog/understanding-restful-api-design",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:38:47",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:38:47",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:38:05",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:33:43",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:31:21",
+            "device": "Desktop"
+        },
+        {
+            "ip": "::1",
+            "page": "/techshyam/blog",
+            "agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.954",
+            "date": "2026-10-07 13:27:33",
+            "device": "Desktop"
+        },
         {
             "ip": "::1",
             "page": "/techshyam/about",

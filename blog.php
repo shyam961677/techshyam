@@ -2,121 +2,82 @@
 require_once __DIR__ . '/admin/includes/auth.php';
 trackVisitor();
 
-$blogs    = readJson('blogs.json') ?? [];
-$profile  = readJson('profile.json') ?? [];
-$settings = readJson('settings.json') ?? [];
-
-// Only show published posts, newest first
-$published = array_reverse(array_values(array_filter($blogs, fn($b) => !empty($b['published']))));
-
-// Simple category filter
-$cat = trim($_GET['cat'] ?? '');
-if ($cat !== '') {
-    $published = array_filter($published, fn($b) => strtolower($b['category'] ?? '') === strtolower($cat));
-}
-
-$seo = $profile['seo'] ?? [];
+$blogs = readJson('blogs.json') ?? [];
+$profile = readJson('profile.json') ?? [];
+$published = array_values(array_filter($blogs, fn($post) => !empty($post['published'])));
+usort($published, fn($a, $b) => strcmp((string)($b['date'] ?? ''), (string)($a['date'] ?? '')));
+$category = trim($_GET['cat'] ?? '');
+$query = trim($_GET['q'] ?? '');
+$categories = array_values(array_unique(array_filter(array_map(
+    fn($post) => trim((string)($post['category'] ?? '')),
+    $published
+))));
+sort($categories, SORT_NATURAL | SORT_FLAG_CASE);
+$filtered = array_values(array_filter($published, function ($post) use ($category, $query) {
+    $matchesCategory = $category === '' || strcasecmp((string)($post['category'] ?? ''), $category) === 0;
+    $haystack = implode(' ', [(string)($post['title'] ?? ''), (string)($post['excerpt'] ?? ''), (string)($post['category'] ?? ''), implode(' ', $post['tags'] ?? [])]);
+    return $matchesCategory && ($query === '' || stripos($haystack, $query) !== false);
+}));
+$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+if ($basePath === '.' || $basePath === '/') $basePath = '';
+$blogUrl = $basePath . '/blog';
+$portfolioUrl = $basePath . '/';
+$postUrl = fn($slug) => $blogUrl . '/' . rawurlencode((string)$slug);
+$name = $profile['name'] ?? 'Portfolio';
+$featured = $category === '' && $query === '' && count($filtered) > 2 ? ($filtered[0] ?? null) : null;
+$cards = $featured ? array_slice($filtered, 1) : $filtered;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog — <?= htmlspecialchars($profile['name'] ?? 'Portfolio', ENT_QUOTES) ?></title>
-    <meta name="description" content="Articles and tutorials by <?= htmlspecialchars($profile['name'] ?? '', ENT_QUOTES) ?>">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#090a12">
+    <link rel="icon" type="image/png" href="<?= htmlspecialchars($basePath . '/assets/images/fav.png', ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="apple-touch-icon" href="<?= htmlspecialchars($basePath . '/assets/images/fav.png', ENT_QUOTES, 'UTF-8') ?>">
+    <title>Insights &amp; Articles | <?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></title>
+    <meta name="description" content="Software development articles, tutorials and insights by <?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>.">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <style>
-        body { font-family:'Poppins',sans-serif; background:#f5f8fc; color:#444; }
-        .blog-hero { background:#0f172a; color:#f1f5f9; padding:60px 0 40px; text-align:center; }
-        .blog-hero h1 { font-size:2rem; font-weight:700; }
-        .blog-hero p { color:#94a3b8; margin-top:8px; }
-        .blog-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; padding:40px 0; }
-        .blog-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.07); transition:transform .2s,box-shadow .2s; }
-        .blog-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.12); }
-        .blog-card img { width:100%; height:190px; object-fit:cover; }
-        .blog-card-img-placeholder { width:100%; height:190px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; }
-        .blog-card-body { padding:20px; }
-        .blog-card-cat { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#3b82f6; margin-bottom:8px; }
-        .blog-card-title { font-size:.95rem; font-weight:700; color:#1e293b; line-height:1.4; margin-bottom:8px; text-decoration:none; display:block; }
-        .blog-card-title:hover { color:#3b82f6; }
-        .blog-card-excerpt { font-size:.82rem; color:#64748b; line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-        .blog-card-meta { display:flex; align-items:center; gap:12px; margin-top:14px; font-size:.75rem; color:#94a3b8; }
-        .tag { display:inline-block; padding:2px 8px; background:#eff6ff; color:#3b82f6; border-radius:20px; font-size:.72rem; font-weight:600; margin-right:4px; }
-        .cat-filter { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:20px 0; }
-        .cat-filter a { padding:6px 16px; border-radius:20px; font-size:.8rem; font-weight:600; text-decoration:none; background:#fff; color:#64748b; border:1.5px solid #e2e8f0; transition:all .2s; }
-        .cat-filter a.active, .cat-filter a:hover { background:#3b82f6; color:#fff; border-color:#3b82f6; }
-        .back-link { color:#3b82f6; text-decoration:none; font-size:.85rem; display:inline-flex; align-items:center; gap:4px; }
-        .back-link:hover { text-decoration:underline; }
+        :root{color-scheme:dark;--bg:#05050d;--panel:#0f0f1e;--panel2:#16162a;--line:rgba(99,102,241,.18);--text:#f5f6ff;--muted:#929bb2;--accent:#8278ff;--cyan:#16c6d3;--rail:72px}
+        *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh;line-height:1.65}
+        a{color:inherit}.wrap{width:min(1120px,calc(100% - 96px));margin-inline:auto}.site-rail{position:fixed;inset:0 auto 0 0;width:var(--rail);z-index:20;background:linear-gradient(180deg,rgba(12,12,27,.98),rgba(5,5,13,.97));border-right:1px solid rgba(145,155,255,.13);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 0}.rail-logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;text-decoration:none;font-weight:800;background:linear-gradient(135deg,#6366f1,#06b6d4);box-shadow:0 8px 24px #6366f144}.rail-links,.rail-social{display:flex;flex-direction:column;align-items:center;gap:8px}.rail-link,.rail-social a{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;color:#71809b;text-decoration:none;font-size:1.15rem;border:1px solid transparent;transition:.2s}.rail-link:hover,.rail-link.active,.rail-social a:hover{color:#bdc5ff;background:#6366f122;border-color:#919bff33}.rail-social a{height:34px;font-size:.95rem}.page{margin-left:var(--rail)}
+        .topbar{display:none}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-size:.95rem;font-weight:750;letter-spacing:-.03em}.brand-mark{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#796cff,#12b9d3);box-shadow:0 8px 28px #5348bb55;font-size:.82rem}.back{color:#c4c9dc;text-decoration:none;font-size:.86rem;display:flex;align-items:center;gap:8px}.back:hover{color:white}
+        .hero{padding:88px 0 50px;position:relative;overflow:hidden;min-height:320px}.hero:before{content:"";position:absolute;width:520px;height:320px;left:38%;top:-190px;background:#695cff22;filter:blur(100px);pointer-events:none}.eyebrow{font:500 .72rem 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#a39cff;display:flex;align-items:center;gap:9px}.eyebrow:before{content:"";height:1px;width:24px;background:var(--cyan)}h1{font-size:clamp(3rem,6.4vw,5.7rem);letter-spacing:-.075em;line-height:.99;margin:21px 0 18px;font-weight:800;max-width:900px}.gradient{background:linear-gradient(100deg,#fff 8%,#7188ff 58%,#12c6d2);-webkit-background-clip:text;background-clip:text;color:transparent}.intro{max-width:570px;color:var(--muted);font-size:1rem;line-height:1.8;margin:0}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-wrap:wrap}.filters{display:flex;gap:8px;flex-wrap:wrap}.filter{border:1px solid var(--line);border-radius:10px;padding:9px 14px;text-decoration:none;color:#b5bdd2;font:500 .76rem 'DM Mono',monospace;transition:.2s;background:#10101b}.filter:hover,.filter.active{border-color:#7168ed;background:#7168ed1c;color:#c5c1ff}.search{display:flex;align-items:center;gap:9px;width:min(270px,100%);border:1px solid var(--line);border-radius:10px;padding:0 14px;background:#10121b;color:#8790a8}.search input{min-width:0;width:100%;padding:10px 0;color:var(--text);border:0;outline:0;background:transparent;font:inherit;font-size:.8rem}.search:focus-within{border-color:#8278ff}
+        .content{padding:34px 0 80px}.featured{display:grid;grid-template-columns:1.15fr 1fr;min-height:340px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(130deg,#141728,#0e0f18);text-decoration:none;margin-bottom:28px;transition:.25s}.featured:hover{border-color:#7168ed88;transform:translateY(-3px);box-shadow:0 22px 60px #0005}.featured-image{min-height:320px;position:relative;background:radial-gradient(ellipse at 50% 35%,#39376b,#17192b 56%,#10121d)}.featured-image img,.card-image img{width:100%;height:100%;object-fit:cover;display:block}.featured-image:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#0d0f18aa)}.featured-copy{padding:clamp(25px,5vw,54px);display:flex;flex-direction:column;justify-content:center}.label{font:500 .68rem 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.13em;color:#a59fff}.featured h2{font-size:clamp(1.65rem,3vw,2.45rem);line-height:1.15;letter-spacing:-.05em;margin:18px 0 12px}.excerpt{color:var(--muted);font-size:.9rem;line-height:1.75;margin:0}.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:#8490aa;font-size:.73rem;margin-top:22px}.meta span{display:flex;align-items:center;gap:6px}.read{margin-top:23px;color:#c2beff;font-weight:700;font-size:.82rem}.read i{margin-left:6px;transition:transform .2s}.featured:hover .read i,.card:hover .read i{transform:translateX(4px)}
+        .section-heading{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:35px 0 18px}.section-heading h2{font-size:1.12rem;letter-spacing:-.03em;margin:0}.section-heading p{font-size:.78rem;color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px}.card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:17px;background:var(--panel);text-decoration:none;transition:transform .22s,border-color .22s,box-shadow .22s}.card:hover{transform:translateY(-4px);border-color:#7168ed88;box-shadow:0 16px 36px #0004}.card-image{height:190px;background:radial-gradient(ellipse at 50% 35%,#36345e,#17192a 65%);position:relative;overflow:hidden}.card-image img{transition:transform .4s}.card:hover .card-image img{transform:scale(1.04)}.placeholder{height:100%;display:grid;place-items:center;color:#aaa5ff;font-size:2rem;background:radial-gradient(ellipse at center,#29284d,#141622 72%)}.card-image .placeholder{position:absolute;inset:0}.featured-image .placeholder{position:absolute;inset:0;font-size:4rem}.placeholder i{filter:drop-shadow(0 0 20px #8278ff88)}.card-body{padding:20px;display:flex;flex-direction:column;flex:1}.category{font:500 .66rem 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:#8e85ff}.card h3{font-size:1.07rem;letter-spacing:-.03em;line-height:1.4;margin:12px 0 9px}.card .excerpt{font-size:.82rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.card .meta{margin-top:auto;padding-top:18px}.card .read{margin-top:16px}.empty{border:1px dashed #353952;border-radius:18px;text-align:center;padding:60px 20px;color:var(--muted)}.empty i{font-size:2rem;color:#8178ff}.empty h2{color:var(--text);font-size:1.1rem;margin:14px 0 6px}.footer{border-top:1px solid #ffffff10;padding:24px 0;color:#818aa1;font-size:.77rem}.footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.footer a{color:#b0aaff;text-decoration:none}
+        @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.featured{grid-template-columns:1fr 1fr}.featured-image{min-height:270px}}
+        @media(max-width:860px){:root{--rail:0px}.site-rail{display:none}.page{margin-left:0}.topbar{height:58px;padding:0 22px;border-bottom:1px solid #ffffff12;display:flex;align-items:center;justify-content:space-between;background:#080811}.wrap{width:min(1120px,calc(100% - 44px))}.hero{padding-top:66px}}
+        @media(max-width:600px){.wrap{width:min(100% - 32px,1180px)}.topbar{height:58px;padding:0 16px}.hero{padding:55px 0 34px;min-height:0}h1{font-size:clamp(2.7rem,13vw,4.2rem)}.toolbar{align-items:stretch}.filters{order:2}.search{width:100%;order:1}.featured{grid-template-columns:1fr}.featured-image{min-height:215px;height:215px}.featured-copy{padding:24px}.grid{grid-template-columns:1fr}.card-image{height:210px}.section-heading{align-items:start;flex-direction:column}}
+        @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
     </style>
 </head>
 <body>
-<div class="blog-hero">
-    <div class="container">
-        <a href="index1.php" class="back-link" style="color:#94a3b8;margin-bottom:16px;display:inline-flex"><i class="bi bi-arrow-left"></i> Back to Portfolio</a>
-        <h1><i class="bi bi-journal-richtext"></i> Blog</h1>
-        <p>Articles, tutorials and thoughts by <?= htmlspecialchars($profile['name'] ?? '', ENT_QUOTES) ?></p>
+<nav class="site-rail" aria-label="Main navigation">
+    <a class="rail-logo" href="<?= htmlspecialchars($portfolioUrl, ENT_QUOTES, 'UTF-8') ?>" aria-label="Home">SY</a>
+    <div class="rail-links">
+        <a class="rail-link" href="<?= htmlspecialchars($portfolioUrl . 'home', ENT_QUOTES, 'UTF-8') ?>" aria-label="Home" title="Home"><i class="bi bi-house-fill"></i></a>
+        <a class="rail-link" href="<?= htmlspecialchars($portfolioUrl . 'about', ENT_QUOTES, 'UTF-8') ?>" aria-label="About" title="About"><i class="bi bi-person-fill"></i></a>
+        <a class="rail-link" href="<?= htmlspecialchars($portfolioUrl . 'experience', ENT_QUOTES, 'UTF-8') ?>" aria-label="Experience" title="Experience"><i class="bi bi-briefcase-fill"></i></a>
+        <a class="rail-link" href="<?= htmlspecialchars($portfolioUrl . 'portfolio', ENT_QUOTES, 'UTF-8') ?>" aria-label="Projects" title="Projects"><i class="bi bi-columns-gap"></i></a>
+        <a class="rail-link active" href="<?= htmlspecialchars($blogUrl, ENT_QUOTES, 'UTF-8') ?>" aria-label="Blog" title="Blog"><i class="bi bi-journal-text"></i></a>
+        <a class="rail-link" href="<?= htmlspecialchars($portfolioUrl . 'contact', ENT_QUOTES, 'UTF-8') ?>" aria-label="Contact" title="Contact"><i class="bi bi-envelope-fill"></i></a>
     </div>
+    <div class="rail-social"><?php $socialIcons = ['linkedin'=>'bi-linkedin','github'=>'bi-github','twitter'=>'bi-twitter-x','instagram'=>'bi-instagram','facebook'=>'bi-facebook']; foreach (($profile['social'] ?? []) as $network => $url): if (!$url) continue; ?><a href="<?= htmlspecialchars($url, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= htmlspecialchars(ucfirst($network), ENT_QUOTES, 'UTF-8') ?>"><i class="bi <?= $socialIcons[$network] ?? 'bi-link-45deg' ?>"></i></a><?php endforeach; ?></div>
+</nav>
+<header class="topbar"><a class="brand" href="<?= htmlspecialchars($portfolioUrl, ENT_QUOTES, 'UTF-8') ?>"><span class="brand-mark">SY</span><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></a><a class="back" href="<?= htmlspecialchars($portfolioUrl, ENT_QUOTES, 'UTF-8') ?>"><i class="bi bi-arrow-left"></i> Portfolio</a></header>
+<div class="page">
+<main>
+    <section class="hero"><div class="wrap"><div class="eyebrow">Notes from the build</div><h1>Ideas, lessons &amp;<br><span class="gradient">engineering notes.</span></h1><p class="intro">Practical articles on backend development, APIs, and the small decisions that make software better.</p></div></section>
+    <div class="wrap"><div class="toolbar"><nav class="filters" aria-label="Filter articles"><a class="filter <?= $category === '' ? 'active' : '' ?>" href="<?= htmlspecialchars($blogUrl, ENT_QUOTES, 'UTF-8') ?>">All articles</a><?php foreach ($categories as $item): ?><a class="filter <?= strcasecmp($category, $item) === 0 ? 'active' : '' ?>" href="<?= htmlspecialchars($blogUrl . '?cat=' . rawurlencode($item), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8') ?></a><?php endforeach; ?></nav><form class="search" method="get" action="<?= htmlspecialchars($blogUrl, ENT_QUOTES, 'UTF-8') ?>"><i class="bi bi-search" aria-hidden="true"></i><input type="search" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search articles" aria-label="Search articles"><?php if ($category !== ''): ?><input type="hidden" name="cat" value="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"><?php endif; ?></form></div></div>
+    <section class="content wrap">
+        <?php if ($featured): ?><a class="featured" href="<?= htmlspecialchars($postUrl($featured['slug'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"><div class="featured-image"><div class="placeholder"><i class="bi bi-braces-asterisk"></i></div><?php if (!empty($featured['image'])): ?><img src="<?= htmlspecialchars($basePath . '/' . ltrim($featured['image'], '/'), ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" onerror="this.remove()" ><?php endif; ?></div><div class="featured-copy"><div class="label"><i class="bi bi-stars"></i> Featured article<?= !empty($featured['category']) ? ' · ' . htmlspecialchars($featured['category'], ENT_QUOTES, 'UTF-8') : '' ?></div><h2><?= htmlspecialchars($featured['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h2><p class="excerpt"><?= htmlspecialchars($featured['excerpt'] ?? '', ENT_QUOTES, 'UTF-8') ?></p><div class="meta"><span><i class="bi bi-calendar3"></i><?= htmlspecialchars($featured['date'] ?? '', ENT_QUOTES, 'UTF-8') ?></span><span><i class="bi bi-eye"></i><?= (int)($featured['views'] ?? 0) ?> reads</span></div><span class="read">Read article <i class="bi bi-arrow-right"></i></span></div></a><?php endif; ?>
+        <?php if ($cards || !$featured): ?><div class="section-heading"><h2><?= $category !== '' ? htmlspecialchars($category, ENT_QUOTES, 'UTF-8') . ' articles' : ($query !== '' ? 'Search results' : 'Latest articles') ?></h2><p><?= count($filtered) ?> <?= count($filtered) === 1 ? 'article' : 'articles' ?></p></div><?php endif; ?>
+        <?php if (!$filtered): ?><div class="empty"><i class="bi bi-journal-x"></i><h2>No articles found</h2><p>Try another search or choose a different category.</p></div><?php elseif ($cards): ?><div class="grid"><?php foreach ($cards as $post): ?><a class="card" href="<?= htmlspecialchars($postUrl($post['slug'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"><div class="card-image"><div class="placeholder"><i class="bi bi-code-slash"></i></div><?php if (!empty($post['image'])): ?><img src="<?= htmlspecialchars($basePath . '/' . ltrim($post['image'], '/'), ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" onerror="this.remove()" ><?php endif; ?></div><div class="card-body"><?php if (!empty($post['category'])): ?><span class="category"><?= htmlspecialchars($post['category'], ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?><h3><?= htmlspecialchars($post['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h3><p class="excerpt"><?= htmlspecialchars($post['excerpt'] ?? '', ENT_QUOTES, 'UTF-8') ?></p><div class="meta"><span><i class="bi bi-calendar3"></i><?= htmlspecialchars($post['date'] ?? '', ENT_QUOTES, 'UTF-8') ?></span><span><i class="bi bi-eye"></i><?= (int)($post['views'] ?? 0) ?> reads</span></div><span class="read">Read article <i class="bi bi-arrow-right"></i></span></div></a><?php endforeach; ?></div><?php endif; ?>
+    </section>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>© <?= date('Y') ?> <?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></span><a href="<?= htmlspecialchars($portfolioUrl, ENT_QUOTES, 'UTF-8') ?>">Back to portfolio <i class="bi bi-arrow-up-right"></i></a></div></footer>
 </div>
-
-<div class="container py-4">
-    <?php
-    // Collect categories
-    $allCats = array_unique(array_filter(array_column($blogs, 'category')));
-    if (!empty($allCats)):
-    ?>
-    <div class="cat-filter">
-        <a href="/blog" class="<?= $cat === '' ? 'active' : '' ?>">All</a>
-        <?php foreach ($allCats as $c): ?>
-        <a href="/blog?cat=<?= urlencode($c) ?>" class="<?= strtolower($cat) === strtolower($c) ? 'active' : '' ?>"><?= htmlspecialchars($c, ENT_QUOTES) ?></a>
-        <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
-
-    <?php if (empty($published)): ?>
-    <div style="text-align:center;padding:80px 0;color:#94a3b8">
-        <i class="bi bi-journal-x" style="font-size:3rem"></i>
-        <p style="margin-top:12px">No posts published yet.</p>
-    </div>
-    <?php else: ?>
-    <div class="blog-grid">
-        <?php foreach ($published as $post): ?>
-        <div class="blog-card">
-            <?php if (!empty($post['image'])): ?>
-                <img src="<?= htmlspecialchars($post['image'], ENT_QUOTES) ?>" alt="<?= htmlspecialchars($post['title'], ENT_QUOTES) ?>" loading="lazy">
-            <?php else: ?>
-                <div class="blog-card-img-placeholder"><i class="bi bi-image" style="font-size:2rem;color:#cbd5e1"></i></div>
-            <?php endif; ?>
-            <div class="blog-card-body">
-                <?php if (!empty($post['category'])): ?>
-                <div class="blog-card-cat"><?= htmlspecialchars($post['category'], ENT_QUOTES) ?></div>
-                <?php endif; ?>
-                <a href="/blog/<?= htmlspecialchars($post['slug'] ?? '', ENT_QUOTES) ?>" class="blog-card-title">
-                    <?= htmlspecialchars($post['title'], ENT_QUOTES) ?>
-                </a>
-                <p class="blog-card-excerpt"><?= htmlspecialchars($post['excerpt'] ?? '', ENT_QUOTES) ?></p>
-                <div class="blog-card-meta">
-                    <span><i class="bi bi-person"></i> <?= htmlspecialchars($post['author'] ?? '', ENT_QUOTES) ?></span>
-                    <span><i class="bi bi-calendar3"></i> <?= htmlspecialchars($post['date'] ?? '', ENT_QUOTES) ?></span>
-                    <span><i class="bi bi-eye"></i> <?= (int)($post['views'] ?? 0) ?></span>
-                </div>
-                <?php if (!empty($post['tags'])): ?>
-                <div style="margin-top:10px">
-                    <?php foreach (array_slice($post['tags'], 0, 3) as $tag): ?>
-                    <span class="tag"><?= htmlspecialchars($tag, ENT_QUOTES) ?></span>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
-</div>
-
-<footer style="background:#0f172a;color:#64748b;text-align:center;padding:24px;font-size:.82rem;margin-top:40px">
-    &copy; <?= date('Y') ?> <?= htmlspecialchars($profile['name'] ?? '', ENT_QUOTES) ?> · <a href="index1.php" style="color:#3b82f6">Portfolio</a>
-</footer>
 </body>
 </html>

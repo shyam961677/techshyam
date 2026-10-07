@@ -2262,29 +2262,9 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
     <div id="stack">
       <div class="stack-label">Core Technical Stack</div>
       <div class="stack-pills">
-        <?php
-        $techs = [
-          'Core PHP',
-          'Laravel',
-          'CodeIgniter',
-          'MySQL',
-          'PostgreSQL',
-          'MongoDB',
-          'RESTful APIs',
-          'RBAC',
-          'Docker',
-          'AWS EC2/S3',
-          'Redis',
-          'Git/GitHub',
-          'JavaScript',
-          'jQuery',
-          'Bootstrap',
-          'AJAX',
-          'Razorpay',
-          'Stripe'
-        ];
-        foreach ($techs as $t):
-        ?><span class="pill"><?= e($t) ?></span><?php endforeach; ?>
+        <?php foreach ($skills as $skill): ?>
+          <span class="pill"><?= e($skill['name'] ?? '') ?></span>
+        <?php endforeach; ?>
       </div>
     </div>
 

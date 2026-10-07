@@ -1,10 +1,20 @@
 [
-    {"id": 1,  "name": "Core PHP",       "order": 1},
-    {"id": 2,  "name": "Laravel",        "order": 2},
-    {"id": 3,  "name": "CodeIgniter",    "order": 3},
-    {"id": 4,  "name": "MySQL / PostgreSQL", "order": 4},
-    {"id": 5,  "name": "RESTful APIs",   "order": 5},
-    {"id": 6,  "name": "JavaScript / jQuery", "order": 6},
-    {"id": 7,  "name": "HTML / CSS / Bootstrap", "order": 7},
-    {"id": 8,  "name": "Docker / AWS",   "order": 8}
+    {"id": 1, "name": "Core PHP", "order": 1},
+    {"id": 2, "name": "Laravel", "order": 2},
+    {"id": 3, "name": "CodeIgniter", "order": 3},
+    {"id": 4, "name": "MySQL", "order": 4},
+    {"id": 5, "name": "PostgreSQL", "order": 5},
+    {"id": 6, "name": "MongoDB", "order": 6},
+    {"id": 7, "name": "RESTful APIs", "order": 7},
+    {"id": 8, "name": "RBAC", "order": 8},
+    {"id": 9, "name": "Docker", "order": 9},
+    {"id": 10, "name": "AWS EC2/S3", "order": 10},
+    {"id": 11, "name": "Redis", "order": 11},
+    {"id": 12, "name": "Git/GitHub", "order": 12},
+    {"id": 13, "name": "JavaScript", "order": 13},
+    {"id": 14, "name": "jQuery", "order": 14},
+    {"id": 15, "name": "Bootstrap", "order": 15},
+    {"id": 16, "name": "AJAX", "order": 16},
+    {"id": 17, "name": "Razorpay", "order": 17},
+    {"id": 18, "name": "Stripe", "order": 18}
 ]

@@ -6,12 +6,16 @@
         "category": "PHP",
         "image": "assets/images/blog/project1.png",
         "excerpt": "A beginner's guide to setting up your PHP development environment and writing your first script.",
-        "content": "PHP is one of the most popular server-side scripting languages. In this post, we explore how to get started with PHP development...",
-        "tags": ["php", "beginner", "web development"],
+        "content": "<p>PHP runs on the server: it receives a request, executes your code, and returns a response such as HTML or JSON. That makes it a practical way to build forms, dashboards, and API endpoints. This guide takes you from a first local page to habits that make a small PHP project safer to extend.</p><h2>Run your first PHP page</h2><p>With XAMPP, start Apache and create a project folder inside <code>htdocs</code>, for example <code>my-first-app</code>. Add an <code>index.php</code> file and open it through <code>http://localhost/my-first-app/</code>. PHP needs to be served by Apache; opening the file directly from your disk will not execute it.</p><pre><code>&lt;?php\\n$name = &quot;Developer&quot;;\\necho htmlspecialchars($name, ENT_QUOTES, &quot;UTF-8&quot;);</code></pre><p>The PHP block executes on the server, and the browser receives the resulting output. The call to <code>htmlspecialchars</code> is important when showing text that may come from a user: it prevents text such as angle brackets from being interpreted as markup.</p><h2>Keep application code understandable</h2><p>Start with clear variable names and small functions. Separate configuration from page output as the project grows. Do not commit passwords or database credentials to a public repository; load them from environment-specific configuration. Turn on detailed error reporting only during local development, then log errors privately in production instead of showing stack traces to visitors.</p><h2>Connect to a database safely</h2><p>Use PDO with prepared statements for database queries. Bind user-provided values instead of joining them into SQL strings; escaping alone is not a reliable substitute for parameterized queries. Validate incoming data on the server, check authorization for protected actions, and use password hashing APIs instead of storing raw passwords.</p><p>Once the basics are comfortable, explore Composer for dependencies and a framework such as Laravel for routing, validation, database access, and testing. Learn what those tools do under the hood, and keep secrets and user input safe from the beginning.</p>",
+        "tags": [
+            "php",
+            "beginner",
+            "web development"
+        ],
         "author": "Shyam Yadav",
         "date": "2026-09-15",
         "published": true,
-        "views": 0
+        "views": 15
     },
     {
         "id": 2,
@@ -20,10 +24,204 @@
         "category": "API",
         "image": "assets/images/blog/project2.png",
         "excerpt": "Learn the principles of RESTful API design and how to build clean, well-structured APIs.",
-        "content": "REST (Representational State Transfer) is an architectural style for building web services. In this article, we explore the core principles...",
-        "tags": ["api", "rest", "backend"],
+        "content": "<p>REST is a way to design network APIs around resources and standard HTTP behavior. A good REST API is not just a set of URLs: clients need consistent methods, status codes, validation errors, and navigation through larger collections.</p><h2>Name resources clearly</h2><p>Represent things with nouns such as <code>/api/projects</code>. Use GET to read, POST to create, PATCH to update selected fields, and DELETE to remove. A collection endpoint and an individual resource endpoint have distinct jobs:</p><pre><code>GET    /api/projects\\nPOST   /api/projects\\nGET    /api/projects/42\\nPATCH  /api/projects/42\\nDELETE /api/projects/42</code></pre><p>Use status codes as part of the contract: 200 for a successful read or update, 201 when a resource is created, 204 for a successful response without a body, 401 when authentication is missing, 403 when permission is denied, 404 when a resource is unavailable, and 422 for invalid input.</p><h2>Make responses predictable</h2><p>Return JSON with stable field names and document how collections are paginated. Validate filters and sort fields against an allowlist. Do not expose internal database columns by returning model records without an explicit response layer. In Laravel, API Resources can control which fields and relationships are serialized.</p><h2>Plan for failures and change</h2><p>Keep error responses useful and consistent without leaking stack traces or private data. Protect state-changing operations with authentication and authorization. For operations a client may retry, consider how duplicate submissions behave. Add optional fields compatibly, and version the API only when clients need a truly breaking contract.</p><p>Write feature tests for successful requests, invalid input, missing authentication, and forbidden access. These tests help ensure the API remains predictable as the implementation changes.</p>",
+        "tags": [
+            "api",
+            "rest",
+            "backend"
+        ],
         "author": "Shyam Yadav",
         "date": "2026-10-01",
+        "published": true,
+        "views": 3
+    },
+    {
+        "id": 3,
+        "title": "Designing Clean REST APIs with Laravel Resource Routes",
+        "slug": "clean-rest-api-design-laravel-resource-routes",
+        "category": "Laravel",
+        "image": "",
+        "excerpt": "Build predictable REST endpoints with resource controllers, clear HTTP semantics, and routes that stay easy to maintain.",
+        "content": "<p>A useful API should be easy to guess. A collection such as <code>/api/projects</code> should make it clear how to list, create, read, update, or delete a project. Laravel resource routes give these operations a consistent foundation.</p><h2>Use resources and HTTP verbs</h2><p>Use nouns for resources and let the HTTP method describe the action: GET lists or reads, POST creates, PATCH updates selected fields, and DELETE removes. Avoid URLs like <code>/getProjects</code>; the method already carries that meaning. An API resource controller skips browser-only create and edit pages:</p><pre><code>Route::apiResource('projects', ProjectController::class);</code></pre><p>Keep controllers focused on HTTP concerns: authorize, validate, call the application operation, and return a response. Use model binding for lookup and return 404 for missing records. Choose status codes consistently, including 201 for creation, 401 for missing authentication, 403 for denied access, and 422 for invalid input.</p><h2>Make the contract explicit</h2><p>Document pagination, filtering, and error shapes alongside the happy path. Add only the operations your product needs. Resource routing does not decide authorization or response shape; those remain deliberate parts of API design.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/controllers#api-resource-routes\">Laravel API resource routes</a>.</p>",
+        "tags": [
+            "Laravel",
+            "REST",
+            "Routing",
+            "API design"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-10-07",
+        "published": true,
+        "views": 2
+    },
+    {
+        "id": 4,
+        "title": "Validate API Requests with Laravel Form Requests",
+        "slug": "laravel-api-validation-form-requests",
+        "category": "Laravel",
+        "image": "",
+        "excerpt": "Move validation out of controllers, return useful 422 errors, and keep API input rules understandable as applications grow.",
+        "content": "<p>Validation is part of an API contract. Clients need to know which fields are accepted and what to correct when input is invalid. Laravel Form Request classes keep those rules out of controllers and give each operation a home for validation and authorization.</p><h2>Validate before handling the request</h2><p>A project creation request might require a title and an allowed status. Put those rules in a dedicated request class and inject it into the controller action. Laravel validates before the action runs, so the controller can work with input that passed the declared rules.</p><pre><code>public function rules(): array { return ['title' =&gt; ['required', 'string', 'max:160']]; }</code></pre><p>Pass <code>$request-&gt;validated()</code> or <code>$request-&gt;safe()</code> into create and update operations. Avoid mass-assigning every submitted field: clients should not set ownership, internal flags, or billing state unless the endpoint explicitly allows it.</p><h2>Separate validation from permission</h2><p>JSON validation failures return 422 with field-specific errors. Validate nested arrays deliberately and keep field names stable. Validation is not authorization: a valid project ID does not mean the caller may edit that project. Check access with policies or request authorization, and test boundaries and unauthorized callers.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/validation#form-request-validation\">Laravel Form Request validation</a>.</p>",
+        "tags": [
+            "Laravel",
+            "Validation",
+            "Form Requests",
+            "Security"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-10-05",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 5,
+        "title": "Choosing the Right Laravel Sanctum Authentication Flow",
+        "slug": "choose-laravel-sanctum-api-authentication",
+        "category": "API",
+        "image": "",
+        "excerpt": "Understand when cookie-based SPA authentication fits and when personal access tokens make more sense.",
+        "content": "<p>API authentication depends on the client. A first-party browser application and a mobile integration have different security and session needs. Laravel Sanctum supports both common patterns, but they should not be treated as the same flow.</p><h2>First-party browser apps</h2><p>When the frontend and Laravel app belong to the same product, Sanctum stateful SPA authentication uses Laravel sessions, cookies, and CSRF protection. Configure trusted stateful domains and cookie settings, initialize the CSRF cookie before login, and send credentials with browser requests. This keeps identity tied to the session instead of storing a bearer token in browser storage.</p><h2>Tokens for other clients</h2><p>For a mobile app or third-party integration, Sanctum can issue personal access tokens. Grant only required abilities, send tokens over HTTPS in the Authorization header, and provide a revocation path. Abilities add restrictions; they do not replace authorization policies. Return 401 when identity is missing and 403 when a known user lacks permission.</p><p>Choose the flow based on the client and document credential revocation. Do not write a custom token parser when the framework guard handles this work.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/sanctum\">Laravel Sanctum documentation</a>.</p>",
+        "tags": [
+            "Laravel",
+            "Sanctum",
+            "Authentication",
+            "API security"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-10-03",
+        "published": true,
+        "views": 1
+    },
+    {
+        "id": 6,
+        "title": "Shape Stable JSON Responses with Laravel API Resources",
+        "slug": "stable-json-responses-laravel-api-resources",
+        "category": "Laravel",
+        "image": "",
+        "excerpt": "Keep database details out of public responses and evolve payloads safely with Laravel resources.",
+        "content": "<p>Returning an Eloquent model directly can make a response depend on model internals, loaded relationships, or hidden-column settings. Laravel API Resources provide an explicit transformation layer between application data and the JSON contract clients consume.</p><h2>Choose what leaves the server</h2><p>A resource lets you name and format fields deliberately. Expose a public identifier, title, and timestamps when clients need them; keep internal notes and implementation details private. Include relationships conditionally when they have been loaded to avoid surprise queries.</p><pre><code>return ProjectResource::collection(Project::query()-&gt;latest()-&gt;paginate(20));</code></pre><p>Keep response envelopes predictable and use consistent formats for dates, nulls, and nested resources. Removing a field or changing its meaning can break clients even if the PHP model did not change. Eager-load relationships used by a resource and inspect query counts.</p><p>A Resource class is a reviewed API boundary. Add fields intentionally, test the JSON shape, and document changes clients can observe.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/eloquent-resources\">Laravel Eloquent Resources</a>.</p>",
+        "tags": [
+            "Laravel",
+            "API Resources",
+            "JSON",
+            "Eloquent"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-10-01",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 7,
+        "title": "Pagination and Filtering for APIs That Scale",
+        "slug": "api-pagination-filtering-laravel",
+        "category": "API",
+        "image": "",
+        "excerpt": "Keep collection endpoints predictable with bounded page sizes, validated filters, and cursor pagination when it fits.",
+        "content": "<p>An endpoint that returns every matching row is easy to write and easy to overload. Pagination protects server resources and gives clients a predictable way to navigate a collection. Its behavior belongs in the API contract.</p><h2>Bound and validate the query</h2><p>Choose a default page size and enforce a maximum. Validate filter and sort parameters against an allowlist rather than passing arbitrary column names into a query. Define whether date boundaries are inclusive and which timezone clients should use.</p><pre><code>Project::query()-&gt;where('status', $status)-&gt;orderByDesc('created_at')-&gt;paginate(20);</code></pre><p>Offset pagination is familiar and supports page numbers, but large offsets can make the database scan and discard many rows. Cursor pagination can suit large, changing feeds when records have a stable ordered key. It does not fit every interface, particularly one that needs arbitrary page jumps.</p><h2>Make navigation reliable</h2><p>Return links or clear next-page metadata and preserve filters between pages. Use deterministic ordering with a unique tie-breaker such as an ID; otherwise adjacent pages may repeat or skip records. Measure queries with realistic data and indexes.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/pagination\">Laravel pagination documentation</a>.</p>",
+        "tags": [
+            "API",
+            "Pagination",
+            "Laravel",
+            "Performance"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-09-29",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 8,
+        "title": "Protect Laravel APIs with Thoughtful Rate Limits",
+        "slug": "protect-laravel-api-rate-limits",
+        "category": "API",
+        "image": "",
+        "excerpt": "Set endpoint-specific limits, identify callers fairly, and return useful retry information without blocking normal traffic.",
+        "content": "<p>Rate limiting protects shared capacity and raises the cost of brute-force or abusive traffic. One global number rarely fits every endpoint: login, search, uploads, and ordinary reads have different risks and resource costs.</p><h2>Set limits around callers</h2><p>Laravel named limiters attach to routes with throttle middleware. Key authenticated limits by user or account; key anonymous requests by IP, while accounting for trusted proxies. Sensitive operations may need both a broad IP limit and a stricter identity limit. Prefix keys when defining multiple windows.</p><pre><code>RateLimiter::for('api-write', function (Request $request) { return Limit::perMinute(30)-&gt;by($request-&gt;user()?-&gt;id ?? $request-&gt;ip()); });</code></pre><p>Choose values from observed usage and capacity. Return 429 when a caller reaches a limit and include retry information when possible. Ensure counters are shared across application instances; per-process memory is not a coordinated production limit.</p><h2>Monitor before tightening</h2><p>Track 429 rates and normal traffic patterns. A strict limit can turn harmless retries into customer-facing failures. Document policies for integrators and apply different rules to authenticated customers, anonymous callers, and expensive operations.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/routing#rate-limiting\">Laravel routing rate limits</a>.</p>",
+        "tags": [
+            "Laravel",
+            "Rate limiting",
+            "API security",
+            "Abuse prevention"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-09-27",
+        "published": true,
+        "views": 1
+    },
+    {
+        "id": 9,
+        "title": "Test Laravel JSON APIs with Feature Tests",
+        "slug": "test-laravel-json-api-feature-tests",
+        "category": "Laravel",
+        "image": "",
+        "excerpt": "Test behavior at the HTTP boundary, including response shape, validation, authorization, and persisted changes.",
+        "content": "<p>Unit tests cover isolated rules, but an API can still fail where routing, middleware, validation, authorization, and serialization meet. Laravel feature tests exercise those pieces together without sending a real network request.</p><h2>Assert public behavior</h2><p>For a create endpoint, send JSON, assert status and response structure, and verify the database change. Add cases for missing fields, unauthenticated callers, users without permission, and unknown resources. Those cases protect the contract clients rely on.</p><pre><code>$this-&gt;actingAs($user)-&gt;postJson('/api/projects', ['title' =&gt; 'Portfolio refresh'])-&gt;assertCreated()-&gt;assertJsonPath('data.title', 'Portfolio refresh');</code></pre><p>Use factories to build the minimum state for each case. Assert fields that are part of the contract rather than every incidental detail. For validation, assert the failing field unless exact message wording is a product requirement.</p><h2>Cover access boundaries</h2><p>A successful request by an owner does not prove another account cannot read the record. Include cross-user cases and test token abilities where relevant. Fake outgoing HTTP calls so tests do not depend on live services. Use an isolated test database and never load production credentials.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/http-tests\">Laravel HTTP testing documentation</a>.</p>",
+        "tags": [
+            "Laravel",
+            "Feature tests",
+            "PHPUnit",
+            "API quality"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-09-25",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 10,
+        "title": "Use Database Transactions for Reliable API Workflows",
+        "slug": "laravel-database-transactions-api-workflows",
+        "category": "Laravel",
+        "image": "",
+        "excerpt": "Keep related database writes consistent and avoid slow external calls while a transaction holds locks.",
+        "content": "<p>Many API operations change multiple records. Creating an order may reserve inventory, write line items, and record payment state. If a database step fails halfway through, records can contradict each other. A transaction groups writes so they commit together or roll back together.</p><h2>Keep the transaction focused</h2><p>Laravel DB transactions roll back when an exception escapes and commit when the closure succeeds. Put database changes that must remain consistent inside the closure, and keep it short. Do not wait for a slow remote service or a large upload while database locks are held.</p><pre><code>DB::transaction(function () use ($orderData) { $order = Order::create($orderData); $order-&gt;items()-&gt;createMany($orderData['items']); });</code></pre><p>A transaction cannot undo a payment already accepted by a provider or an email already sent. Persist intended state and use an outbox or queued job for external effects. A transaction closure may run again after a deadlock, so do not put non-idempotent calls inside it.</p><h2>Enforce invariants</h2><p>Use unique constraints for rules that must hold under concurrent requests and handle duplicate submissions intentionally. Transactions preserve database atomicity; they do not replace validation, authorization, or concurrency design.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/database#database-transactions\">Laravel database transactions</a>.</p>",
+        "tags": [
+            "Laravel",
+            "Database",
+            "Transactions",
+            "Reliability"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-09-23",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 11,
+        "title": "Move Slow API Work into Laravel Queues",
+        "slug": "move-slow-api-work-laravel-queues",
+        "category": "Laravel",
+        "image": "",
+        "excerpt": "Keep request times predictable with background jobs that are observable, retry-safe, and tied to committed data.",
+        "content": "<p>Generating a large export, sending many notifications, or processing an uploaded file can take longer than a normal request should. Laravel queues hand expensive work to a worker so the API can acknowledge the request quickly.</p><h2>Give work a visible lifecycle</h2><p>Dispatch after validating and authorizing the request. Return a response that describes the state, such as 202 Accepted with a status resource while work is pending. Store an export or task record so clients can check progress rather than guess from a timeout.</p><pre><code>BuildExport::dispatch($export-&gt;id)-&gt;afterCommit();</code></pre><p>Use a real queue backend in production and keep workers running under a process manager. The synchronous driver is useful during development but performs work inside the request. Set timeouts, retry limits, and failed-job handling deliberately.</p><h2>Make retries safe</h2><p>A worker may fail after part of a task and then retry. Design jobs to be idempotent so processing the same export twice does not create duplicate irreversible actions. Use an external provider idempotency key when available. Dispatch after commit when the job depends on newly created records, and monitor queue depth, age, failures, and run time.</p><p>Reference: <a href=\"https://laravel.com/docs/13.x/queues\">Laravel queues documentation</a>.</p>",
+        "tags": [
+            "Laravel",
+            "Queues",
+            "Background jobs",
+            "API performance"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-09-21",
+        "published": true,
+        "views": 0
+    },
+    {
+        "id": 12,
+        "title": "Version APIs Without Breaking Existing Clients",
+        "slug": "version-apis-without-breaking-clients",
+        "category": "API",
+        "image": "",
+        "excerpt": "Treat response fields as a contract, introduce compatible changes, and give clients a migration path for breaking updates.",
+        "content": "<p>An API is a promise to the software consuming it. Removing a response field, changing its meaning, or making an optional field required can break a mobile app or integration you do not control. Compatibility is part of product design.</p><h2>Prefer additive changes</h2><p>Adding an optional response field is usually easier for clients than renaming an existing one. Keep types stable; do not change a string into an object in place. For requests, introduce new optional inputs before requiring them. Avoid exposing database columns directly as the contract so internal models can evolve independently.</p><h2>Version only when needed</h2><p>A major version is appropriate when consumers need a different contract and both versions can be supported during a transition. Whether you choose a path such as <code>/api/v2</code> or a versioned media type, document the policy and apply it consistently.</p><p>When retiring a version, identify active consumers, publish a migration guide, communicate a sunset date, and monitor old-version traffic. Do not log secrets or personal data while measuring usage. Contract tests for important consumers can catch accidental breaking changes.</p><p>Stable names, predictable errors, careful deprecation, and backwards-compatible defaults reduce how often a breaking release is needed.</p>",
+        "tags": [
+            "API design",
+            "Versioning",
+            "Compatibility",
+            "Laravel"
+        ],
+        "author": "Shyam Yadav",
+        "date": "2026-09-19",
         "published": true,
         "views": 0
     }
