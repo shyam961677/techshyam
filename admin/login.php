@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('techshyam-theme')||'dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
     <title>Admin Login — TechShyam</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -74,6 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .alert-error { display: flex; align-items: center; gap: 9px; margin-bottom: 20px; padding: 12px 14px; border: 1px solid #f4caca; border-radius: 10px; color: #a83c3c; background: #fff5f4; font-size: .78rem; }
         .form-note { display: flex; align-items: center; gap: 8px; margin-top: 24px; color: #8995a7; font-size: .71rem; }
         .form-note i { color: #53a17e; }
+        .login-theme { position:fixed; z-index:5; top:18px; right:20px; display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid #dce3ed; border-radius:999px; color:#26344a; background:#fff; font:600 .78rem 'Poppins',sans-serif; cursor:pointer; box-shadow:0 8px 24px rgba(20,35,60,.12); }
+        :root[data-theme="dark"] { color-scheme:dark; }
+        :root[data-theme="dark"] body, :root[data-theme="dark"] .login-shell { background:#0b1120; }
+        :root[data-theme="dark"] .form-panel { background:linear-gradient(145deg,#111a2c 35%,#0b1120); }
+        :root[data-theme="dark"] .form-heading h2 { color:#f1f5f9; }
+        :root[data-theme="dark"] .form-heading p, :root[data-theme="dark"] .form-group label { color:#a3b1c5; }
+        :root[data-theme="dark"] .form-group input { color:#f1f5f9; background:#172235; border-color:#334155; }
+        :root[data-theme="dark"] .form-group input:focus { background:#1b2a40; }
+        :root[data-theme="dark"] .login-theme { color:#f1f5f9; background:#172235; border-color:#334155; }
         @media (max-width: 700px) {
             .login-shell { min-height: 100vh; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
             .brand-panel { min-height: 155px; padding: 24px 28px; }
@@ -89,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+    <button type="button" class="login-theme" data-theme-toggle aria-label="Switch to bright mode" aria-pressed="false"><i class="bi bi-sun-fill" aria-hidden="true"></i><span>Bright mode</span></button>
     <main class="login-shell">
         <section class="brand-panel" aria-label="TechShyam administration">
             <div class="brand"><span class="brand-mark"><i class="bi bi-layers-fill" aria-hidden="true"></i></span> TechShyam</div>
@@ -141,6 +152,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
     </main>
     <script>
+        (function() {
+            const root = document.documentElement;
+            const toggles = document.querySelectorAll('[data-theme-toggle]');
+            function applyTheme(theme) {
+                const light = theme === 'light';
+                root.dataset.theme = light ? 'light' : 'dark';
+                toggles.forEach(button => {
+                    button.setAttribute('aria-pressed', String(light));
+                    button.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to bright mode');
+                    button.innerHTML = `<i class="bi ${light ? 'bi-moon-stars-fill' : 'bi-sun-fill'}" aria-hidden="true"></i><span>${light ? 'Dark mode' : 'Bright mode'}</span>`;
+                });
+            }
+            let savedTheme = 'dark';
+            try { savedTheme = localStorage.getItem('techshyam-theme') || 'dark'; } catch (error) {}
+            applyTheme(savedTheme);
+            toggles.forEach(button => button.addEventListener('click', () => {
+                const nextTheme = root.dataset.theme === 'light' ? 'dark' : 'light';
+                applyTheme(nextTheme);
+                try { localStorage.setItem('techshyam-theme', nextTheme); } catch (error) {}
+            }));
+        })();
         function togglePass() {
             const inp = document.getElementById('password');
             const eye = document.getElementById('eyeIcon');

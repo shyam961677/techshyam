@@ -38,6 +38,7 @@ $pendingComments = count(array_filter(readJson('comments.json') ?? [], fn($c) =>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('techshyam-theme')||'dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
     <meta name="csrf-token" content="<?= e(csrfToken()) ?>">
     <title><?= e($pageTitle ?? 'Admin') ?> — TechShyam Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -63,6 +64,11 @@ $pendingComments = count(array_filter(readJson('comments.json') ?? [], fn($c) =>
             --danger: #ef4444;
             --warning: #f59e0b;
             --info: #06b6d4;
+        }
+        :root[data-theme="light"] {
+            color-scheme: light;
+            --bg:#f3f6fb; --sidebar-bg:#fff; --card-bg:#fff; --border:#e3e9f2;
+            --border2:#d5deeb; --text:#172033; --muted:#64748b; --hover-bg:#eef3fa;
         }
         body {
             font-family: 'Poppins', sans-serif;
@@ -150,6 +156,13 @@ $pendingComments = count(array_filter(readJson('comments.json') ?? [], fn($c) =>
             border-top: 1px solid var(--border2);
             flex-shrink: 0;
         }
+        .sidebar-theme {
+            display:flex; width:100%; align-items:center; gap:10px; margin-bottom:12px; padding:9px 10px;
+            border:1px solid var(--border2); border-radius:8px; color:var(--text); background:var(--hover-bg);
+            font:500 .78rem 'Poppins',sans-serif; text-align:left; cursor:pointer; transition:background .18s,border-color .18s;
+        }
+        .sidebar-theme:hover { border-color:var(--primary); }
+        .sidebar-theme i { color:var(--warning); font-size:.95rem; }
         .sidebar-user {
             display: flex;
             align-items: center;
@@ -417,6 +430,7 @@ $pendingComments = count(array_filter(readJson('comments.json') ?? [], fn($c) =>
         <?php endforeach; ?>
     </nav>
     <div class="sidebar-footer">
+        <button type="button" class="sidebar-theme" data-theme-toggle aria-label="Switch to bright mode" aria-pressed="false"><i class="bi bi-sun-fill" aria-hidden="true"></i><span>Bright mode</span></button>
         <div class="sidebar-user">
             <div class="avatar"><?= strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1)) ?></div>
             <div class="user-info">

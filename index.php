@@ -29,6 +29,7 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('techshyam-theme')||'dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
   <title><?= e($seo['meta_title'] ?? "$name | $title") ?></title>
   <meta name="description" content="<?= e($seo['meta_description'] ?? '') ?>">
   <meta name="keywords" content="<?= e($seo['meta_keywords']    ?? '') ?>">
@@ -66,6 +67,41 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
       --font: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
     }
+    :root[data-theme="light"] {
+      color-scheme:light; --bg:#f7f8fc; --bg2:#eef1f7; --bg3:#e5e9f1;
+      --card:#fff; --card2:#f8f9fd; --bdr:rgba(79,70,229,.15); --bdr2:rgba(23,32,51,.1);
+      --txt:#182033; --txt2:#536078; --txt3:#637089; --white:#182033; --p-lt:#5145d8;
+      --ac:#0786a6; --ok:#168548;
+    }
+    :root[data-theme="light"] body { background:var(--bg); }
+    :root[data-theme="light"] .sidenav { background:linear-gradient(180deg,#fff,#f8f9fd); border-color:#e1e5ee; box-shadow:8px 0 32px rgba(31,41,69,.06) }
+    :root[data-theme="light"] .sn-item { color:#68758d }
+    :root[data-theme="light"] .sn-item:hover,
+    :root[data-theme="light"] .sn-item.active { color:#5145d8; background:rgba(81,69,216,.08); border-color:rgba(81,69,216,.14) }
+    :root[data-theme="light"] .sn-item.active { box-shadow:inset 0 0 18px rgba(81,69,216,.04) }
+    :root[data-theme="light"] .sn-item.active::before { background:linear-gradient(180deg,#6558e8,#0796b2) }
+    :root[data-theme="light"] .sn-soc { color:#69758b }
+    :root[data-theme="light"] .sn-soc:hover { color:#5145d8; background:rgba(81,69,216,.07); border-color:rgba(81,69,216,.14) }
+    :root[data-theme="light"] .sn-social::before { background:#dfe4ed }
+    :root[data-theme="light"] .sn-tip { color:#263149; background:#fff; border-color:#e0e5ee; box-shadow:0 8px 24px rgba(31,41,69,.12) }
+    :root[data-theme="light"] .topbar { background:rgba(255,255,255,.94); border-color:#e1e5ee }
+    :root[data-theme="light"] .mobile-theme { color:#5145d8; background:#fff; border-color:#dce2ec }
+    :root[data-theme="light"] .mob-menu { background:rgba(248,249,253,.98) }
+    :root[data-theme="light"] .mob-item { color:#354158 }
+    :root[data-theme="light"] .hero-name .grd { background-image:linear-gradient(120deg,#5145d8,#087f9c 58%,#168548) }
+    :root[data-theme="light"] .hero-stats { background:rgba(255,255,255,.82); border-color:var(--bdr); box-shadow:0 14px 38px rgba(31,41,69,.06) }
+    :root[data-theme="light"] .stat-n { background-image:linear-gradient(135deg,#263149,#5145d8) }
+    :root[data-theme="light"] .hero-chip { background:rgba(255,255,255,.8); border-color:rgba(23,32,51,.1); color:#46536b }
+    :root[data-theme="light"] .hero-chip.php,
+    :root[data-theme="light"] .hero-chip.larv,
+    :root[data-theme="light"] .hero-chip.ci,
+    :root[data-theme="light"] .hero-chip.db,
+    :root[data-theme="light"] .hero-chip.api { color:#46536b }
+    :root[data-theme="light"] .sec-tag { color:#5145d8; background:rgba(81,69,216,.07); border-color:rgba(81,69,216,.16) }
+    :root[data-theme="light"] .proj-link { color:#5145d8 }
+    :root[data-theme="light"] .fi { background:#fff; border-color:#d9dfeb; color:var(--txt) }
+    :root[data-theme="light"] .fi::placeholder { color:#8b96aa }
+    :root[data-theme="light"] .ci-ico { color:#5145d8 }
 
     /* ════════════════════════════════════════════════════
    RESET
@@ -1703,33 +1739,63 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
    CONTACT
 ════════════════════════════════════════════════════ */
     #contact {
-      background: var(--bg2)
+      background: radial-gradient(ellipse at 12% 8%, rgba(99, 102, 241, .09), transparent 38%), var(--bg2);
+      transition: background .3s ease, color .3s ease
     }
+
+    .sn-theme { background:transparent; cursor:pointer; padding:0; font:inherit }
+    .sn-theme i { color:var(--ac2) }
+    .mobile-theme { width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:rgba(99,102,241,.1);border:1px solid var(--bdr);color:var(--txt);font-size:1.05rem;cursor:pointer }
+    :root[data-theme="light"] body { color-scheme:light }
+    :root[data-theme="light"] .fi { background:rgba(255,255,255,.75); border-color:rgba(23,32,51,.14); color:var(--txt) }
+    :root[data-theme="light"] .map-wrap iframe { filter:none }
+    :root[data-theme="light"] #contact .ci-row, :root[data-theme="light"] #contact .fc { box-shadow:0 14px 40px rgba(31,41,69,.06) }
+    .contact-info-panel {
+      padding:18px;
+      border:1px solid var(--bdr);
+      border-radius:18px;
+      background:var(--card);
+      box-shadow:0 18px 48px rgba(0,0,0,.1)
+    }
+    :root[data-theme="light"] .contact-info-panel {
+      background:#fff;
+      border-color:rgba(79,70,229,.1);
+      box-shadow:0 18px 48px rgba(31,41,69,.07)
+    }
+    :root[data-theme="light"] .contact-info-panel .ci-row { background:#f8f9fd; box-shadow:none }
+    #contact .sec-sub { max-width:600px }
 
     .contact-wrap {
       display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 44px;
-      margin-top: 44px
+      grid-template-columns: minmax(260px,.88fr) minmax(0,1.4fr);
+      align-items:stretch;
+      gap: clamp(20px,3vw,36px);
+      margin-top: 38px
     }
 
     .ci-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin-bottom: 32px
+      gap: 10px;
+      margin-bottom: 18px
     }
 
     .ci-row {
       background: var(--card);
       border: 1px solid var(--bdr);
-      border-radius: var(--r);
-      padding: 18px 20px;
+      border-radius: 15px;
+      padding: 15px 17px;
       display: flex;
       align-items: center;
       gap: 14px;
       transition: all var(--tr);
     }
+
+    .ci-row > div:last-child { min-width:0 }
+    .ci-link { text-decoration:none; color:inherit; margin:0; flex:initial }
+    .ci-link::after { content:'↗'; margin-left:auto; color:var(--txt3); font-size:.9rem; transition:transform .2s,color .2s }
+    .ci-link:hover::after { color:var(--p-lt); transform:translate(2px,-2px) }
+    .ci-row .ci-value { display:block; overflow-wrap:anywhere; font-size:.85rem; color:var(--txt) }
 
     .ci-row:hover {
       border-color: rgba(99, 102, 241, .35);
@@ -1768,9 +1834,18 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
     .fc {
       background: var(--card);
       border: 1px solid var(--bdr);
-      border-radius: var(--r);
-      padding: 32px 28px
+      border-radius: 18px;
+      padding: clamp(22px,3vw,34px);
+      box-shadow:0 18px 48px rgba(0,0,0,.12)
     }
+
+    .fc-head { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:24px }
+    .fc-title { color:var(--white); font-size:1.15rem; font-weight:750; letter-spacing:-.03em; margin:0 0 5px }
+    .fc-copy { color:var(--txt2); font-size:.82rem; line-height:1.65; margin:0 }
+    .fc-mark { width:40px;height:40px; flex:none;display:grid;place-items:center;border:1px solid var(--bdr);border-radius:12px;background:rgba(99,102,241,.1);color:var(--p-lt) }
+    .contact-availability { display:inline-flex; align-items:center; gap:8px; margin-top:17px; padding:8px 11px; border:1px solid rgba(34,197,94,.22); border-radius:999px; background:rgba(34,197,94,.07); color:var(--txt2); font-size:.74rem; font-weight:600 }
+    .contact-availability::before { content:''; width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.12) }
+    :root[data-theme="light"] #contact .fc { box-shadow:0 18px 48px rgba(31,41,69,.08) }
 
     .frow {
       display: grid;
@@ -1791,10 +1866,11 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
       text-transform: uppercase;
       letter-spacing: .05em
     }
+    .optional-label { display:inline; margin-left:5px; color:var(--txt3); font-size:.65rem; font-weight:500; text-transform:none; letter-spacing:0 }
 
     .fi {
       width: 100%;
-      padding: 11px 15px;
+      padding: 12px 14px;
       background: rgba(255, 255, 255, .03);
       border: 1.5px solid rgba(255, 255, 255, .07);
       border-radius: 9px;
@@ -1817,7 +1893,7 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
 
     textarea.fi {
       resize: vertical;
-      min-height: 108px
+      min-height: 132px
     }
 
     .ferr {
@@ -1883,15 +1959,20 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
       border-radius: var(--r);
       overflow: hidden;
       border: 1px solid var(--bdr);
-      margin-top: 14px
+      margin-top: 0
     }
 
     .map-wrap iframe {
       display: block;
       width: 100%;
+      height:190px;
       border: 0;
       filter: invert(90%) hue-rotate(180deg)
     }
+
+    :root[data-theme="light"] #contact { background:radial-gradient(ellipse at 12% 8%,rgba(99,102,241,.11),transparent 38%),var(--bg2) }
+    :root[data-theme="light"] .toast.ok { color:#15803d }
+    :root[data-theme="light"] .toast.err { color:#b91c1c }
 
     /* ════════════════════════════════════════════════════
    FOOTER
@@ -2068,6 +2149,8 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
         grid-template-columns: 1fr
       }
 
+      .fc-head { margin-bottom:20px }
+
       .about-meta {
         grid-template-columns: 1fr
       }
@@ -2136,6 +2219,7 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
       <?php endforeach; ?>
     </ul>
     <div class="sn-social">
+      <button type="button" class="sn-soc sn-theme" data-theme-toggle aria-label="Switch to bright mode" aria-pressed="false" title="Switch to bright mode"><i class="bi bi-sun-fill" aria-hidden="true"></i></button>
       <?php
       $socialIcons = ['linkedin' => 'bi-linkedin', 'github' => 'bi-github', 'twitter' => 'bi-twitter-x', 'instagram' => 'bi-instagram', 'facebook' => 'bi-facebook'];
       foreach ($social as $k => $url): if (!$url) continue;
@@ -2149,7 +2233,10 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
   <!-- ── Mobile Topbar ─────────────────────────────────────── -->
   <div class="topbar">
     <span class="topbar-brand">SY.</span>
-    <button class="ham" id="ham"><i class="bi bi-list" id="hamIco"></i></button>
+    <div style="display:flex;align-items:center;gap:9px">
+      <button class="mobile-theme" type="button" data-theme-toggle aria-label="Switch to bright mode" aria-pressed="false" title="Switch to bright mode"><i class="bi bi-sun-fill" aria-hidden="true"></i></button>
+      <button class="ham" id="ham"><i class="bi bi-list" id="hamIco"></i></button>
+    </div>
   </div>
   <nav class="mob-menu" id="mobMenu">
     <?php foreach ($navs as [$sec, $ico, $lbl]): ?>
@@ -2223,10 +2310,6 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
             <div class="stat-item">
               <span class="stat-n" data-count="4">0</span>
               <span class="stat-l">Years Exp.</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-n" data-count="<?= count($projects) ?>">0</span>
-              <span class="stat-l">Projects</span>
             </div>
             <div class="stat-item">
               <span class="stat-n" data-count="3">0</span>
@@ -2411,14 +2494,15 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
 ╚══════════════════════════╝ -->
     <section id="contact">
       <div class="rv">
-        <div class="sec-tag"><i class="bi bi-envelope-fill"></i> Contact</div>
+        <div class="sec-tag"><i class="bi bi-envelope-fill"></i> Get in touch</div>
         <h2 class="sec-h">Let's <span>Connect</span></h2>
-        <p class="sec-sub">Open to full-time roles, freelance projects, and collaboration — reach out and I'll reply within 24 hours.</p>
+        <p class="sec-sub">Have an idea, opportunity, or question? Send a note and let’s start a conversation. I usually reply within 24 hours.</p>
+        <div class="contact-availability">Available for select opportunities</div>
       </div>
       <div class="contact-wrap">
 
         <!-- Info -->
-        <div class="rvl d1">
+        <div class="rvl d1 contact-info-panel">
           <div class="ci-list">
             <?php
             $cInfo = [
@@ -2427,23 +2511,39 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
               ['bi-geo-alt-fill',  'Location', $profile['address'] ?? ''],
             ];
             foreach ($cInfo as [$ico, $lbl, $val]):
+              $href = '';
+              if ($lbl === 'Email' && filter_var($val, FILTER_VALIDATE_EMAIL)) {
+                $href = 'mailto:' . $val;
+              } elseif ($lbl === 'Phone') {
+                $primaryPhone = !empty($profile['phone1']) ? $profile['phone1'] : ($profile['phone2'] ?? '');
+                $phoneHref = preg_replace('/[^0-9+]/', '', (string)$primaryPhone);
+                if ($phoneHref !== '') $href = 'tel:' . $phoneHref;
+              }
+              $tag = $href !== '' ? 'a' : 'div';
             ?>
-              <div class="ci-row">
+              <<?= $tag ?> class="ci-row <?= $href !== '' ? 'ci-link' : '' ?>" <?= $href !== '' ? 'href="' . e($href) . '"' : '' ?>>
                 <div class="ci-ico"><i class="bi <?= $ico ?>"></i></div>
-                <div><strong><?= $lbl ?></strong><span><?= e($val) ?></span></div>
-              </div>
+                <div><strong><?= e($lbl) ?></strong><span class="ci-value"><?= e($val) ?></span></div>
+              </<?= $tag ?>>
             <?php endforeach; ?>
           </div>
           <div class="map-wrap">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.990538015637!2d77.37673801500891!3d28.630045682418817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceff8864e0cf1%3A0xa20290bf75099ebd!2sBSI%20Business%20Park%20H15!5e0!3m2!1sen!2sin!4v1677239001686!5m2!1sen!2sin"
-              height="200" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+              title="Map showing the contact location" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
           </div>
         </div>
 
         <!-- Form -->
         <div class="fc rvr d2">
+          <div class="fc-head">
+            <div>
+              <h3 class="fc-title">Send a message</h3>
+              <p class="fc-copy">Share a little about what you have in mind.</p>
+            </div>
+            <span class="fc-mark"><i class="bi bi-chat-square-text-fill" aria-hidden="true"></i></span>
+          </div>
           <div class="toast" id="toast">
             <i class="bi" id="toastIco"></i>
             <span id="toastMsg"></span>
@@ -2451,31 +2551,31 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
           <form id="cForm" novalidate>
             <div class="frow">
               <div class="fg">
-                <label>Name</label>
-                <input type="text" name="name" id="fn" class="fi" placeholder="Shyam Milan Yadav">
+                <label for="fn">Name</label>
+                <input type="text" name="name" id="fn" class="fi" placeholder="Your name" autocomplete="name" required>
                 <span class="ferr" id="fnErr"></span>
               </div>
               <div class="fg">
-                <label>Email</label>
-                <input type="email" name="email" id="fe" class="fi" placeholder="you@email.com">
+                <label for="fe">Email</label>
+                <input type="email" name="email" id="fe" class="fi" placeholder="you@email.com" autocomplete="email" required>
                 <span class="ferr" id="feErr"></span>
               </div>
             </div>
             <div class="frow">
               <div class="fg">
-                <label>Phone</label>
-                <input type="text" name="phone" id="fp" class="fi" placeholder="+91 000 000 0000">
+                <label for="fp">Phone <span class="optional-label">Optional</span></label>
+                <input type="tel" name="phone" id="fp" class="fi" placeholder="+91 000 000 0000" autocomplete="tel">
                 <span class="ferr" id="fpErr"></span>
               </div>
               <div class="fg">
-                <label>Subject</label>
-                <input type="text" name="subject" id="fs" class="fi" placeholder="Project inquiry…">
+                <label for="fs">Subject</label>
+                <input type="text" name="subject" id="fs" class="fi" placeholder="What would you like to discuss?" required>
                 <span class="ferr" id="fsErr"></span>
               </div>
             </div>
             <div class="fg">
-              <label>Message</label>
-              <textarea name="message" id="fm" class="fi" placeholder="Describe your project or opportunity…"></textarea>
+              <label for="fm">Message</label>
+              <textarea name="message" id="fm" class="fi" placeholder="A few details will help me get back to you…" required></textarea>
               <span class="ferr" id="fmErr"></span>
             </div>
             <button type="submit" class="btn-send" id="sbtn">
@@ -2508,6 +2608,29 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
 ════════════════════════════════════════════════════ -->
   <script src="assets/js/jquery-3.2.1.min.js"></script>
   <script>
+    (function() {
+      const root = document.documentElement;
+      const toggles = document.querySelectorAll('[data-theme-toggle]');
+      function applyTheme(theme) {
+        const light = theme === 'light';
+        root.dataset.theme = light ? 'light' : 'dark';
+        toggles.forEach(button => {
+          button.setAttribute('aria-pressed', String(light));
+          button.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to bright mode');
+          button.title = light ? 'Switch to dark mode' : 'Switch to bright mode';
+          button.innerHTML = `<i class="bi ${light ? 'bi-moon-stars-fill' : 'bi-sun-fill'}" aria-hidden="true"></i>`;
+        });
+      }
+      let savedTheme = 'dark';
+      try { savedTheme = localStorage.getItem('techshyam-theme') || 'dark'; } catch (error) {}
+      applyTheme(savedTheme);
+      toggles.forEach(button => button.addEventListener('click', () => {
+        const nextTheme = root.dataset.theme === 'light' ? 'dark' : 'light';
+        applyTheme(nextTheme);
+        try { localStorage.setItem('techshyam-theme', nextTheme); } catch (error) {}
+      }));
+    })();
+
     /* ── Preloader ── */
     window.addEventListener('load', () => setTimeout(() => document.getElementById('pre').classList.add('hide'), 250));
 
@@ -2720,7 +2843,6 @@ $subtitle = htmlspecialchars($profile['subtitle'] ?? 'PHP | Laravel | CodeIgnite
       const map = {
         fn: 'Name',
         fe: 'Email',
-        fp: 'Phone',
         fs: 'Subject',
         fm: 'Message'
       };
